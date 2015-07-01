@@ -26,6 +26,7 @@ exports.create = function (req,res){
 		}
 
 		req.session.user = {id: user.id, username: user.username};
+		console.log('Creado usuario: '+req.session.user.id+' '+req.session.user.username);
 		res.redirect(req.session.redir.toString());
 	});
 };

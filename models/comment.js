@@ -11,6 +11,13 @@ module.exports = function (sequelize, DataTypes){
 									type: DataTypes.BOOLEAN,
 									defaultValue: false
 								}
+							},
+							{
+								classMethods: {
+									contadorPregComentadas: function(){
+										return this.aggregate('QuizId', 'count', {distinct: true});
+									}
+								}
 							}
 		);
 }

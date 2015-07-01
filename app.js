@@ -26,11 +26,28 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Middleware comprueba sesión inactiva
+app.use(function(req,res,next){
+    console.log('req.session.tiempo= '+req.session.tiempo);
+    if (req.session.user){
+        if(req.session.tiempo && (((new Date()).getTime() - req.session.tiempo) > 120000 )){
+            delete req.session.user;
+            delete req.session.tiempo;
+            console.log('Usuario borrado');
+            res.redirect('/login');
+        }else{
+            req.session.tiempo = (new Date()).getTime();
+        }
+    }
+    next();
+});
+
 app.use(function(req, res, next){
+
     if(!req.path.match(/\/login|\/logout/)){
         req.session.redir = req.path;
     }
-
+    
     res.locals.session = req.session;
     next();
 });
